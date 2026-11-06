@@ -78,14 +78,21 @@ builder.Services.AddHttpClient<GeminiModelProvider>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(Math.Max(5, appOptions.ModelTimeoutSeconds));
 });
+builder.Services.AddHttpClient<OllamaModelProvider>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(Math.Max(30, appOptions.OllamaTimeoutSeconds));
+});
 builder.Services.AddSingleton<UnconfiguredModelProvider>();
 
-// The live host only ever uses Gemini. Without a key it uses a provider that fails with a setup message.
+// MODEL_PROVIDER=ollama uses local Qwen through Ollama. Otherwise Gemini is used when a key is set.
+// Without either, the provider fails with a setup message and never invents findings.
 // The rule-based DemoModelProvider is registered by automated tests only.
 builder.Services.AddSingleton<IModelProvider>(services =>
-    string.IsNullOrWhiteSpace(appOptions.GeminiApiKey)
-        ? services.GetRequiredService<UnconfiguredModelProvider>()
-        : services.GetRequiredService<GeminiModelProvider>());
+    string.Equals(appOptions.ModelProvider, "ollama", StringComparison.OrdinalIgnoreCase)
+        ? services.GetRequiredService<OllamaModelProvider>()
+        : string.IsNullOrWhiteSpace(appOptions.GeminiApiKey)
+            ? services.GetRequiredService<UnconfiguredModelProvider>()
+            : services.GetRequiredService<GeminiModelProvider>());
 builder.Services.AddSingleton<AnalysisProcessor>();
 // Hosting (for example Railway): listen on the platform's PORT, and optionally run the job worker
 // inside the API process (EMBED_WORKER=1) so one service and one volume are enough.
@@ -170,6 +177,10 @@ static void MapEnvironment(ConfigurationManager configuration)
 
     Set("GEMINI_API_KEY", "App:GeminiApiKey");
     Set("GEMINI_MODEL_ID", "App:GeminiModelId");
+    Set("MODEL_PROVIDER", "App:ModelProvider");
+    Set("OLLAMA_BASE_URL", "App:OllamaBaseUrl");
+    Set("OLLAMA_MODEL_ID", "App:OllamaModelId");
+    Set("OLLAMA_TIMEOUT_SECONDS", "App:OllamaTimeoutSeconds");
     Set("PAYMENTS_MODE", "App:PaymentsMode");
     Set("DEMO_MONTHLY_PRICE_AZN", "App:DemoMonthlyPriceAzn");
     Set("DATABASE_URL", "App:DatabaseUrl");

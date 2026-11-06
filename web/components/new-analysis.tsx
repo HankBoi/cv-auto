@@ -224,7 +224,7 @@ export function NewAnalysis() {
                   >
                     <input
                       type="checkbox"
-                      className="size-4 accent-emerald-400"
+                      className="size-4 accent-blue-400"
                       checked={selected.includes(document.document_id)}
                       disabled={busy !== null}
                       onChange={() => toggle(document.document_id)}
@@ -290,7 +290,7 @@ export function NewAnalysis() {
                 id="finding-language"
                 value={findingLanguage}
                 onChange={(event) => setLanguage(event.target.value as Locale)}
-                className="min-h-10 w-full rounded-xl border border-white/15 bg-[#0a2218] px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-mint"
+                className="min-h-10 w-full rounded-xl border border-white/15 bg-[#0c1c33] px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-mint"
               >
                 {LOCALES.map((code) => (
                   <option key={code} value={code}>

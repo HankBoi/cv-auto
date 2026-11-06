@@ -97,7 +97,7 @@ export function ExportScreen({ id }: { id: string }) {
                 id="export-language"
                 value={chosen}
                 onChange={(event) => setLanguage(event.target.value as Locale)}
-                className="min-h-10 w-full max-w-xs rounded-xl border border-white/15 bg-[#0a2218] px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-mint"
+                className="min-h-10 w-full max-w-xs rounded-xl border border-white/15 bg-[#0c1c33] px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-mint"
               >
                 {LOCALES.map((code) => (
                   <option key={code} value={code}>

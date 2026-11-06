@@ -102,7 +102,7 @@ public sealed class DemoModelProvider : IModelProvider
                     RequirementId = requirement.RequirementId.ToString(),
                     Status = "not_found",
                     NeedsHumanReview = true,
-                    Explanation = "Not found in the uploaded files. This does not mean the supplier lacks the document.",
+                    Explanation = "Not found in the uploaded files. This does not mean the person lacks the document.",
                     ReviewReason = "No uploaded page shared enough exact wording with this requirement."
                 });
                 continue;
@@ -179,7 +179,7 @@ public sealed class DemoModelProvider : IModelProvider
         var folded = TextNorm.Fold(paragraph);
         var requirementClass = "informational";
         var label = "explicit";
-        var reason = "Extracted from the tender page. A person needs to confirm it.";
+        var reason = "Extracted from the requirements page. A person needs to confirm it.";
 
         if (folded.Contains("ziddiyyət", StringComparison.Ordinal) || folded.Contains("oxunması çətin", StringComparison.Ordinal))
         {
@@ -191,7 +191,7 @@ public sealed class DemoModelProvider : IModelProvider
         {
             requirementClass = "evaluated";
             label = "explicit";
-            reason = "The tender describes a scored item, not a pass/fail document by itself.";
+            reason = "The document describes a scored item, not a pass/fail document by itself.";
         }
         else if (folded.Contains("əgər", StringComparison.Ordinal) || folded.Contains("yalnız", StringComparison.Ordinal))
         {

@@ -111,7 +111,7 @@ public class FixtureEvaluationTests : IClassFixture<ApiFactory>
         var joint = matched.Single(row => (row.GetProperty("quote").GetString() ?? "").Contains("birgə fəaliyyət", StringComparison.Ordinal));
         var jointMatch = joint.GetProperty("evidence").EnumerateArray().Single();
         Assert.Equal("not_found", jointMatch.GetProperty("status").GetString());
-        Assert.Contains("does not mean the supplier lacks", jointMatch.GetProperty("explanation").GetString(), StringComparison.Ordinal);
+        Assert.Contains("does not mean the person lacks", jointMatch.GetProperty("explanation").GetString(), StringComparison.Ordinal);
 
         Assert.DoesNotContain(matched, row => row.GetProperty("evidence").EnumerateArray().Any(match =>
             match.TryGetProperty("evidence_file_name", out var name)

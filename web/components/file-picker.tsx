@@ -48,7 +48,7 @@ export function FilePicker({
       }}
       className={cn(
         "grid justify-items-center gap-2 rounded-2xl border border-dashed border-mint/35 bg-black/20 px-4 py-5 text-center transition-colors",
-        dragging && "border-mint bg-emerald-400/10",
+        dragging && "border-mint bg-blue-400/10",
         disabled && "opacity-60",
       )}
     >

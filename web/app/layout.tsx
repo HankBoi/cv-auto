@@ -10,12 +10,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Kubera",
-  description: "Kubera: every tender requirement, its source, and your evidence.",
+  title: "statific",
+  description: "statific: every hiring requirement, its source, and your documents.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#03100b",
+  themeColor: "#071018",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -9,6 +9,7 @@ public static class ModelOutputParser
     {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+        NumberHandling = JsonNumberHandling.AllowReadingFromString,
         UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow
     };
 

@@ -285,7 +285,7 @@ public sealed class AnalysisProcessor(
                 {
                     RequirementId = requirement.Id.ToString(),
                     Status = "not_found",
-                    Explanation = "Not found in the uploaded files. This does not mean the supplier lacks the document.",
+                    Explanation = "Not found in the uploaded files. This does not mean the person lacks the document.",
                     ReviewReason = "The matcher returned no row for this requirement.",
                     NeedsHumanReview = true
                 };
@@ -399,7 +399,7 @@ public sealed class AnalysisProcessor(
                 Status = "not_found",
                 QuoteVerified = false,
                 NeedsHumanReview = true,
-                Explanation = "Not found in the uploaded files. This does not mean the supplier lacks the document.",
+                Explanation = "Not found in the uploaded files. This does not mean the person lacks the document.",
                 ReviewReason = link.ReviewReason
             };
         }

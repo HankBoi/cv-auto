@@ -94,7 +94,7 @@ public static class WorkspaceEndpoints
     {
         if (!request.HasFormContentType)
         {
-            return Endpoints.Error("unsupported_file_type", "Upload one or more company PDFs.", false, 400);
+            return Endpoints.Error("unsupported_file_type", "Upload one or more HR PDFs.", false, 400);
         }
 
         var form = await request.ReadFormAsync(cancellationToken);

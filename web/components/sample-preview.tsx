@@ -24,7 +24,7 @@ export function SamplePreview() {
 
       <figure className="mt-4 rounded-xl border border-white/12 bg-black/25 p-4">
         <figcaption className="mb-3 flex items-center justify-between gap-2 text-xs text-muted">
-          <span>uydurma-tender.pdf</span>
+          <span>vakansiya-telebleri.pdf</span>
           <span>
             {t("page")} 3
           </span>

@@ -6,7 +6,7 @@ namespace TenderEvidenceChecker.Api.Services;
 public sealed class UnconfiguredModelProvider : IModelProvider
 {
     public const string SetupMessage =
-        "No AI model key is configured on the server. Set GEMINI_API_KEY (and optionally GEMINI_MODEL_ID) in the server environment or the local .env file, then restart the API and the worker.";
+        "No AI model is configured. For local Qwen, set MODEL_PROVIDER=ollama and run Ollama with qwen2.5:7b-instruct. Or set GEMINI_API_KEY. Then restart the API and the worker.";
 
     public string ProviderId => "none";
     public string ModelId => "";

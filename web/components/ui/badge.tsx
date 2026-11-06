@@ -8,7 +8,7 @@ const badgeVariants = cva(
     variants: {
       tone: {
         neutral: "border-white/15 bg-white/8 text-foreground",
-        mint: "border-mint/40 bg-emerald-400/12 text-mint",
+        mint: "border-mint/40 bg-blue-400/12 text-mint",
         high: "border-red-300/50 bg-red-500/15 text-red-100",
         medium: "border-amber-300/50 bg-amber-400/15 text-amber-100",
         low: "border-sky-300/45 bg-sky-400/12 text-sky-100",

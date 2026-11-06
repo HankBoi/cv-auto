@@ -53,8 +53,17 @@ const CATEGORIES = [
 ];
 const SEVERITIES = ["high", "medium", "low", "uncertain"];
 
+function fileStem(name: string) {
+  return name.replace(/\.pdf$/i, "").replace(/[-_]+/g, " ").trim();
+}
+
+function applicantName(file: { file_id: string; original_name: string }, names: Record<string, string>) {
+  const custom = names[file.file_id]?.trim();
+  return custom || fileStem(file.original_name) || file.original_name;
+}
+
 const selectClass =
-  "min-h-10 w-full rounded-xl border border-white/15 bg-[#0a2218] px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-mint";
+  "min-h-10 w-full rounded-xl border border-white/15 bg-[#0c1c33] px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-mint";
 
 export function AnalysisWorkspace({ id }: { id: string }) {
   const { t, has } = useI18n();
@@ -72,8 +81,39 @@ export function AnalysisWorkspace({ id }: { id: string }) {
   const [severity, setSeverity] = useState("all");
   const [onlyUnverified, setOnlyUnverified] = useState(false);
   const [onlyOpen, setOnlyOpen] = useState(false);
+  const [applicantNames, setApplicantNames] = useState<Record<string, string>>({});
+  const [applicantId, setApplicantId] = useState<string | null>(null);
 
   const refresh = useCallback(() => setTick((value) => value + 1), []);
+
+  const evidenceFiles = useMemo(
+    () => (analysis?.files ?? []).filter((file) => file.role === "evidence"),
+    [analysis],
+  );
+
+  useEffect(() => {
+    if (!analysis) return;
+    const key = `statific-applicants:${analysis.analysis_id}`;
+    let stored: Record<string, string> = {};
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(key) ?? "{}") as unknown;
+      if (parsed && typeof parsed === "object") stored = parsed as Record<string, string>;
+    } catch {
+      stored = {};
+    }
+    setApplicantNames(stored);
+    const files = analysis.files.filter((file) => file.role === "evidence");
+    setApplicantId((current) => (current && files.some((file) => file.file_id === current) ? current : (files[0]?.file_id ?? null)));
+  }, [analysis]);
+
+  function renameApplicant(fileId: string, value: string) {
+    if (!analysis) return;
+    setApplicantNames((current) => {
+      const next = { ...current, [fileId]: value };
+      window.localStorage.setItem(`statific-applicants:${analysis.analysis_id}`, JSON.stringify(next));
+      return next;
+    });
+  }
 
   useEffect(() => {
     let stop = false;
@@ -235,11 +275,11 @@ export function AnalysisWorkspace({ id }: { id: string }) {
                     </select>
                   </div>
                   <label className="flex min-h-10 items-center gap-2 text-sm">
-                    <input type="checkbox" className="size-4 accent-emerald-400" checked={onlyUnverified} onChange={(event) => setOnlyUnverified(event.target.checked)} />
+                    <input type="checkbox" className="size-4 accent-blue-400" checked={onlyUnverified} onChange={(event) => setOnlyUnverified(event.target.checked)} />
                     {t("filters.unverified")}
                   </label>
                   <label className="flex min-h-10 items-center gap-2 text-sm">
-                    <input type="checkbox" className="size-4 accent-emerald-400" checked={onlyOpen} onChange={(event) => setOnlyOpen(event.target.checked)} />
+                    <input type="checkbox" className="size-4 accent-blue-400" checked={onlyOpen} onChange={(event) => setOnlyOpen(event.target.checked)} />
                     {t("filters.open")}
                   </label>
                 </Card>
@@ -255,11 +295,76 @@ export function AnalysisWorkspace({ id }: { id: string }) {
               ) : null}
               {requirements.length > 0 && visible.length === 0 ? <Alert>{t("filters.none")}</Alert> : null}
 
+              {evidenceFiles.length > 0 && applicantId ? (
+                <Card className="grid gap-3 p-4" aria-labelledby="applicant-heading">
+                  <div>
+                    <h2 id="applicant-heading" className="font-semibold">
+                      {t("applicant.title")}
+                    </h2>
+                    <p className="mt-1 text-sm leading-6 text-muted">{t("applicant.hint")}</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t("applicant.title")}>
+                    {evidenceFiles.map((file) => {
+                      const name = applicantName(file, applicantNames);
+                      const selected = file.file_id === applicantId;
+                      return (
+                        <button
+                          key={file.file_id}
+                          type="button"
+                          role="radio"
+                          aria-checked={selected}
+                          onClick={() => setApplicantId(file.file_id)}
+                          className={cn(
+                            "min-h-10 rounded-full border px-3 text-sm",
+                            selected ? "border-blue-300 bg-blue-400 text-blue-950" : "border-white/15 bg-white/5 hover:bg-white/10",
+                          )}
+                        >
+                          {name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <Label htmlFor="applicant-name">{t("applicant.name")}</Label>
+                  <input
+                    id="applicant-name"
+                    value={applicantNames[applicantId] ?? ""}
+                    placeholder={fileStem(evidenceFiles.find((file) => file.file_id === applicantId)?.original_name ?? "")}
+                    onChange={(event) => renameApplicant(applicantId, event.target.value)}
+                    className={selectClass}
+                  />
+                  <p className="text-sm font-medium">
+                    {t("applicant.meets", {
+                      name: applicantName(evidenceFiles.find((file) => file.file_id === applicantId)!, applicantNames),
+                      matched: requirements.filter((item) =>
+                        item.evidence?.some(
+                          (evidence) => evidence.evidence_file_id === applicantId && evidence.status === "possible_match",
+                        ),
+                      ).length,
+                      total: requirements.length,
+                    })}
+                  </p>
+                </Card>
+              ) : null}
+
               <ul className="grid gap-4">
                 {visible.map((requirement) => (
                   <li key={requirement.requirement_id}>
                     <FindingCard
                       requirement={requirement}
+                      applicant={
+                        applicantId
+                          ? {
+                              fileId: applicantId,
+                              name: applicantName(
+                                evidenceFiles.find((file) => file.file_id === applicantId) ?? {
+                                  file_id: applicantId,
+                                  original_name: "",
+                                },
+                                applicantNames,
+                              ),
+                            }
+                          : null
+                      }
                       disabled={busy}
                       onSave={async (decision, statement, note) => {
                         const saved = await patchRequirement(requirement.requirement_id, decision, statement, note);
@@ -488,7 +593,7 @@ function EvidencePanel({
                 <label className="flex min-h-9 items-center gap-2 text-sm">
                   <input
                     type="checkbox"
-                    className="size-4 accent-emerald-400"
+                    className="size-4 accent-blue-400"
                     checked={picked.includes(document.document_id)}
                     onChange={() =>
                       setPicked((current) =>

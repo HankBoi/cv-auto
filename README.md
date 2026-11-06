@@ -1,8 +1,8 @@
-# Tender Evidence Checker
+# statific
 
-A local evidence-checklist assistant. You upload one tender PDF and (optionally) your own company PDFs. The tool extracts candidate requirements and risks, shows the source file, page, and an exact verified quote for each finding, suggests possible supporting documents, and lets a person confirm, edit, reject, or comment before exporting a CSV checklist.
+A local checklist for hiring documents. You upload one requirements PDF (a vacancy, an onboarding list, or a contract) and, optionally, CVs, contracts, and certificates. The tool extracts requirements and risks, shows the source file, page, and an exact verified quote for each finding, suggests possible supporting documents, and lets a person confirm, edit, reject, or comment before exporting a CSV checklist.
 
-It does not search for tenders. It does not decide legal compliance or eligibility, write or submit a bid, or promise an outcome. It is not an official procurement portal and has no connection to etender.gov.az.
+It does not decide who to hire, rank candidates, write contracts, contact people, or promise an outcome.
 
 The interface is available in Azerbaijani (default), Russian, and English. The toggle is in the header. Findings can be written in any of the three languages. Source quotes stay in the language of the document.
 
@@ -30,11 +30,13 @@ Home, New analysis, Results, Human review (confirm, edit, reject, uncertain, not
 
 Extraction runs on the server through Google Gemini (`GEMINI_MODEL_ID`, default `gemini-3.5-flash-lite`). The key is read from `GEMINI_API_KEY` in the server environment or the uncommitted `.env` file. It never reaches the browser. Model output is parsed as structured JSON and re-validated on the server. Each quote is checked against the extracted page text. A finding whose quote or page fails the check is shown as "Source not verified".
 
-Without a key the app stays usable for uploads and review, and the New analysis page shows a setup message. No model output is invented as a fallback. Test code uses scripted providers only.
+A local Qwen model is optional: set `MODEL_PROVIDER=ollama` only when Ollama is already running. Leave that variable unset to stay on Gemini. No model output is invented as a fallback. Test code uses scripted providers only.
 
-"Not found in uploaded files" means only that the uploaded files did not contain it. It never means the company lacks the document.
+Without a configured model the app stays usable for uploads and review, and the New analysis page shows a setup message.
 
-Fictional sample pack: **Try the sample pack** on the New analysis page uploads the invented tender and eight synthetic supplier PDFs, runs the real model on them, and marks the result as sample mode. Sample runs do not count toward the free allowance and are kept apart from live results. The sample pack is limited to eight supplier files because the API accepts at most eight company documents per analysis.
+"Not found in uploaded files" means only that the uploaded files did not contain it. It never means the person lacks the document.
+
+Fictional sample pack: **Try the sample pack** on the New analysis page uploads the invented PDF pack in this repo, runs the real model on it, and marks the result as sample mode. Those sample files are still the original fictional document set. Sample runs do not count toward the free allowance and are kept apart from live results. The sample pack is limited to eight extra files because the API accepts at most eight supporting documents per analysis.
 
 ## Free allowance and demo subscription
 

@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --forest-950: #03100b;
-  --forest-900: #06180f;
-  --forest-800: #0a2a1c;
-  --ink: #e8f6ee;
-  --muted: #a3c2b2;
-  --line: rgba(167, 243, 208, 0.18);
-  --emerald: #34d399;
-  --emerald-strong: #10b981;
-  --mint: #a7f3d0;
-  --accent-ink: #022a1b;
+  --forest-950: #071018;
+  --forest-900: #0c1828;
+  --forest-800: #132844;
+  --ink: #e8eef8;
+  --muted: #a3b4cc;
+  --line: rgba(147, 197, 253, 0.18);
+  --emerald: #3b82f6;
+  --emerald-strong: #1d4ed8;
+  --mint: #bfdbfe;
+  --accent-ink: #071018;
   --danger: #fda4a4;
   --danger-strong: #b42318;
-  --highlight: rgba(52, 211, 153, 0.22);
+  --highlight: rgba(59, 130, 246, 0.28);
   --glass-bg: linear-gradient(140deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035));
   --glass-border: rgba(255, 255, 255, 0.13);
 }
@@ -21,7 +21,7 @@
 @theme inline {
   --color-background: var(--forest-950);
   --color-foreground: var(--ink);
-  --color-card: rgba(12, 40, 28, 0.62);
+  --color-card: rgba(16, 36, 64, 0.62);
   --color-border: var(--line);
   --color-muted: var(--muted);
   --color-accent: var(--emerald);
@@ -46,14 +46,14 @@ body {
   color: var(--ink);
   background-color: var(--forest-950);
   background-image:
-    radial-gradient(60rem 36rem at 12% -8%, rgba(16, 185, 129, 0.26), transparent 62%),
-    radial-gradient(44rem 30rem at 92% 6%, rgba(110, 231, 183, 0.12), transparent 60%),
-    radial-gradient(52rem 34rem at 50% 108%, rgba(6, 95, 70, 0.4), transparent 62%);
+    radial-gradient(60rem 36rem at 12% -8%, rgba(37, 99, 235, 0.28), transparent 62%),
+    radial-gradient(44rem 30rem at 92% 6%, rgba(147, 197, 253, 0.14), transparent 60%),
+    radial-gradient(52rem 34rem at 50% 108%, rgba(30, 58, 138, 0.42), transparent 62%);
   background-attachment: fixed;
 }
 
 ::selection {
-  background: rgba(52, 211, 153, 0.4);
+  background: rgba(59, 130, 246, 0.45);
   color: #fff;
 }
 
@@ -64,7 +64,7 @@ body {
 
 /* Liquid glass panel: translucent fill, blur, specular top edge. */
 .glass {
-  background: var(--glass-bg), rgba(8, 32, 22, 0.55);
+  background: var(--glass-bg), rgba(10, 22, 42, 0.55);
   border: 1px solid var(--glass-border);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   backdrop-filter: blur(18px) saturate(140%);
@@ -76,16 +76,16 @@ body {
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .glass {
-    background: rgba(9, 36, 25, 0.94);
+    background: rgba(8, 18, 36, 0.94);
   }
 }
 
 .glass-strong {
-  background: var(--glass-bg), rgba(6, 26, 18, 0.82);
+  background: var(--glass-bg), rgba(8, 18, 36, 0.82);
 }
 
 .text-gradient {
-  background: linear-gradient(100deg, #ecfdf5 10%, #a7f3d0 45%, #34d399 90%);
+  background: linear-gradient(100deg, #eef4ff 10%, #bfdbfe 45%, #60a5fa 90%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -168,13 +168,13 @@ body {
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .tilt-card:hover {
     transform: perspective(900px) translateY(-3px) rotateX(2deg);
-    border-color: rgba(167, 243, 208, 0.4);
+    border-color: rgba(147, 197, 253, 0.4);
   }
 }
 
 mark.quote-mark {
   background: var(--highlight);
-  color: #f2fff8;
+  color: #f4f8ff;
   padding: 0.05em 0.2em;
   border-radius: 0.25rem;
   box-decoration-break: clone;

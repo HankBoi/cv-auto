@@ -23,6 +23,12 @@ public sealed class AppOptions
     public string GeminiApiKey { get; set; } = "";
     public string GeminiModelId { get; set; } = "gemini-3.5-flash-lite";
 
+    /// <summary>Empty or "gemini" uses Gemini when a key is set. "ollama" uses a local Qwen model.</summary>
+    public string ModelProvider { get; set; } = "";
+    public string OllamaBaseUrl { get; set; } = "http://127.0.0.1:11434";
+    public string OllamaModelId { get; set; } = "qwen2.5:7b-instruct";
+    public int OllamaTimeoutSeconds { get; set; } = 300;
+
     public string PaymentsMode { get; set; } = "demo";
     public decimal DemoMonthlyPriceAzn { get; set; } = 19m;
     public int FreeAnalysisLimit { get; set; } = 3;

@@ -40,7 +40,7 @@ const DECISION_BUTTONS: {
   activeClass: string;
   idleClass: string;
 }[] = [
-  { decision: "confirm", key: "confirm", icon: CheckCircle2, idleClass: "border-emerald-400/40 bg-emerald-400/10 text-emerald-100 hover:bg-emerald-400/20", activeClass: "border-emerald-300 bg-emerald-400 text-emerald-950 shadow-[0_6px_20px_-8px_rgba(52,211,153,0.9)]" },
+  { decision: "confirm", key: "confirm", icon: CheckCircle2, idleClass: "border-blue-400/40 bg-blue-400/10 text-blue-100 hover:bg-blue-400/20", activeClass: "border-blue-300 bg-blue-400 text-blue-950 shadow-[0_6px_20px_-8px_rgba(59,130,246,0.9)]" },
   { decision: "edit", key: "edit", icon: Pencil, idleClass: idle, activeClass: "border-mint bg-mint/25 text-white" },
   { decision: "reject", key: "reject", icon: XCircle, idleClass: "border-red-400/40 bg-red-400/10 text-red-100 hover:bg-red-400/20", activeClass: "border-red-300 bg-red-500 text-white" },
   { decision: "uncertain", key: "uncertain", icon: CircleHelp, idleClass: idle, activeClass: "border-amber-300 bg-amber-400 text-amber-950" },
@@ -76,10 +76,12 @@ export function FindingCard({
   requirement,
   disabled,
   onSave,
+  applicant,
 }: {
   requirement: Requirement;
   disabled: boolean;
   onSave: (decision: string, statement?: string, note?: string) => Promise<void>;
+  applicant?: { fileId: string; name: string } | null;
 }) {
   const { t, has } = useI18n();
   const errorText = useErrorText();
@@ -210,13 +212,18 @@ export function FindingCard({
         </dl>
       ) : null}
 
-      {requirement.evidence?.map((evidence, index) => (
-        <div key={index} className="mt-4 border-l-2 border-accent pl-3 text-sm">
+      {applicant ? <p className="mt-4 text-sm font-semibold">{applicant.name}</p> : null}
+      {(applicant
+        ? (requirement.evidence ?? []).filter((evidence) => evidence.evidence_file_id === applicant.fileId)
+        : (requirement.evidence ?? [])
+      ).map((evidence, index) => (
+        <div key={index} className="mt-2 border-l-2 border-accent pl-3 text-sm">
           <Badge tone={evidenceTone[evidence.status] ?? "neutral"}>{label("evidenceStatus", evidence.status)}</Badge>
           {evidence.evidence_file_name ? (
             <p className="mt-1 text-muted">
-              {evidence.evidence_file_name}
+              {applicant ? applicant.name : evidence.evidence_file_name}
               {evidence.page_number ? `, ${t("page")} ${evidence.page_number}` : ""}
+              {applicant ? ` · ${evidence.evidence_file_name}` : ""}
             </p>
           ) : null}
           {evidence.quote_verified && evidence.quote ? (
@@ -231,6 +238,9 @@ export function FindingCard({
           {evidence.date_observation ? <p className="mt-2">{evidence.date_observation}</p> : null}
         </div>
       ))}
+      {applicant && !(requirement.evidence ?? []).some((evidence) => evidence.evidence_file_id === applicant.fileId) ? (
+        <p className="mt-4 border-l-2 border-white/20 pl-3 text-sm text-muted">{t("applicant.notInCv", { name: applicant.name })}</p>
+      ) : null}
 
       {requirement.review_reason && requirement.quote_verified ? (
         <p className="mt-3 text-xs text-muted">

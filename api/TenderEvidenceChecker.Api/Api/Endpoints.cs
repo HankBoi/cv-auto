@@ -95,13 +95,13 @@ public static class Endpoints
         var label = (form["label"].ToString() ?? "").Trim();
         if (label.Length is < 2 or > 200)
         {
-            return Error("unsupported_file_type", "Name the tender with 2 to 200 characters, then choose a PDF.", false, 400);
+            return Error("unsupported_file_type", "Name the analysis with 2 to 200 characters, then choose a PDF.", false, 400);
         }
 
         var file = form.Files.GetFile("file") ?? form.Files.FirstOrDefault(item => item.Name != "files");
         if (file is null)
         {
-            return Error("unsupported_file_type", "Choose one tender PDF.", false, 400);
+            return Error("unsupported_file_type", "Choose one requirements PDF.", false, 400);
         }
 
         var isSample = string.Equals(form["sample"].ToString(), "true", StringComparison.OrdinalIgnoreCase);
@@ -392,12 +392,12 @@ public static class Endpoints
 
         if (analysis.Status is "queued" or "processing")
         {
-            return Error("export_failed", "Wait until the tender checklist finishes before adding company documents.", true, 409);
+            return Error("export_failed", "Wait until the checklist finishes before adding HR documents.", true, 409);
         }
 
         if (!request.HasFormContentType)
         {
-            return Error("unsupported_file_type", "Upload one or more company PDFs.", false, 400);
+            return Error("unsupported_file_type", "Upload one or more HR PDFs.", false, 400);
         }
 
         var form = await request.ReadFormAsync(cancellationToken);
@@ -670,7 +670,7 @@ public static class Endpoints
         }
 
         var bytes = CsvExporter.Build(analysis, request.Query["lang"].ToString());
-        return Results.File(bytes, "text/csv; charset=utf-8", "tender-checklist.csv");
+        return Results.File(bytes, "text/csv; charset=utf-8", "hr-checklist.csv");
     }
 
     private static async Task<IResult> DeleteAnalysis(

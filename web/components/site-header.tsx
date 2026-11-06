@@ -28,16 +28,11 @@ export function SiteHeader() {
   const { quota } = useQuota(pathname);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#04120c]/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#071018]/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-        <Link href="/" className="flex min-w-0 items-center gap-2.5 rounded-xl">
+        <Link href="/" className="flex min-w-0 items-center rounded-xl">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/kubera-logo.png" alt="" width={40} height={40} className="size-10 shrink-0 object-contain drop-shadow-[0_0_8px_rgba(167,243,208,0.35)]" />
-          
-          <span className="min-w-0">
-            <span className="block truncate text-base leading-tight font-semibold">{t("productName")}</span>
-            <span className="block text-[11px] tracking-[0.14em] text-accent uppercase">{t("localDemo")}</span>
-          </span>
+          <img src="/statific-logo.png" alt="statific" className="h-11 w-auto object-contain" />
         </Link>
 
         <nav aria-label={t("nav.label")} className="hidden items-center gap-1 lg:flex">
@@ -64,7 +59,7 @@ export function SiteHeader() {
           {quota ? (
             <Link
               href="/plan"
-              className="hidden min-h-9 items-center rounded-full border border-mint/30 bg-emerald-400/10 px-3 text-xs text-mint sm:inline-flex"
+              className="hidden min-h-9 items-center rounded-full border border-mint/30 bg-blue-400/10 px-3 text-xs text-mint sm:inline-flex"
               title={t("header.quotaTitle")}
             >
               {quota.subscription_active

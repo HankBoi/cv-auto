@@ -87,7 +87,7 @@ public class GeminiProviderTests
         var system = json.RootElement.GetProperty("systemInstruction").GetProperty("parts")[0].GetProperty("text").GetString()!;
         Assert.Contains("Russian", system, StringComparison.Ordinal);
         Assert.Contains("untrusted", system, StringComparison.Ordinal);
-        Assert.Contains("Never output a numeric risk score", system, StringComparison.Ordinal);
+        Assert.Contains("Never output a numeric score", system, StringComparison.Ordinal);
         var user = json.RootElement.GetProperty("contents")[0].GetProperty("parts")[0].GetProperty("text").GetString()!;
         Assert.StartsWith("pages:", user, StringComparison.Ordinal);
     }

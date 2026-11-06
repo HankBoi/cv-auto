@@ -335,7 +335,7 @@ export async function downloadChecklist(id: string, language: string) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "tender-checklist.csv";
+  link.download = "hr-checklist.csv";
   link.click();
   URL.revokeObjectURL(url);
 }
